@@ -2,6 +2,8 @@
 
 """Define a square class"""
 
+
 class Square:
+    """Representation of square class"""
+
     pass
-""" representation of square class"""
