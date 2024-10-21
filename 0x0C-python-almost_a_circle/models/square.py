@@ -1,49 +1,52 @@
 #!/usr/bin/python3
-'''Module for Square class.'''
+"""
+This module implements a Square object
+"""
 from models.rectangle import Rectangle
 
 
 class Square(Rectangle):
-    '''A Square class.'''
-
+    """ The Square Class"""
     def __init__(self, size, x=0, y=0, id=None):
-        '''Constructor.'''
+        """ the class init"""
         super().__init__(size, size, x, y, id)
+        self.__size = size
 
     def __str__(self):
-        '''Returns string info about this square.'''
-        return '[{}] ({}) {}/{} - {}'.\
-            format(type(self).__name__, self.id, self.x, self.y, self.width)
+        """string representation"""
+        id = self.id
+        size = self.__size
+        x = self.x
+        y = self.y
+        return "[Square] ({}) {}/{} - {}".format(id, x, y, size)
 
     @property
     def size(self):
-        '''Size of this square.'''
-        return self.width
+        """size getter"""
+        return self.__size
 
     @size.setter
     def size(self, value):
+        """size setter"""
+        self.validation('width', value)
+        self.__size = value
         self.width = value
         self.height = value
 
-    def __update(self, id=None, size=None, x=None, y=None):
-        '''Internal method that updates instance attributes via */**args.'''
-        if id is not None:
-            self.id = id
-        if size is not None:
-            self.size = size
-        if x is not None:
-            self.x = x
-        if y is not None:
-            self.y = y
-
     def update(self, *args, **kwargs):
-        '''Updates instance attributes via no-keyword & keyword args.'''
-        if args:
-            self.__update(*args)
+        """assigns an argument to each attribute"""
+        full = (self.id, self.size, self.x, self.y)
+        if args != ():
+            self.id, self.size, self.x, self.y = \
+                args + full[len(args):len(full)]
         elif kwargs:
-            self.__update(**kwargs)
+            for (name, value) in kwargs.items():
+                setattr(self, name, value)
 
-    def to_dictionary(self):
-        '''Returns dictionary representation of this class.'''
-        return {"id": self.id, "size": self.width,
-                "x": self.x, "y": self.y}
+    def to_dictionary(self) -> dict:
+        """dictionary representation"""
+        id = self.id
+        size = self.__size
+        x = self.x
+        y = self.y
+        return {'id': id, 'x': x, 'size': size, 'y': y}
